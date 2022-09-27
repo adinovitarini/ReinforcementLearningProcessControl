@@ -1,4 +1,4 @@
-clearvars -except dataCampur p 
+clearvars -except p 
 clc
 clf
 tic
