@@ -43,7 +43,6 @@ wih = wih_new;
 k_new = forward(m_row,wih,L);
 a_new = forwardOut(m_row,woh,k_new);
 a = a_new;
-%     iter = iter+1;
     end
 end
 mse_e = mse(Y,a);
@@ -63,49 +62,4 @@ q1 = woh*wii';
 regressorInp = 0.25*sum(q1(:,1:size(wii,1)))
 q2 = woh*vii';
 regressorOut = 0.25*sum(q2(:,1:size(vii,1)))
-% %Eigenvalues
-A=eye(na,na)
-for i = 1:na
-    A(na,i) = regressorInp(i); 
-end
-B = zeros(na,1);
-B(na,1)=1;
-C = zeros(1,na);
-D = 0;
-% %Applied to training 
-U_t = A(:,1);
-Y_t = A(:,4);
-m_row_t = size(Y_t,1); 
-L_t = TimeDelayBlock(m_row_t,na,nb,U_t,Y_t);
-L_t = L_t(1:m_row_t,:);
-k_t = forward(m_row,wih,L_t);
-a_t = forwardOut(m_row,woh,k_t);
-e_t = .5*((Y_t-a_t)'*(Y_t-a_t));
-% %Applied to validation data 
-U_test = B(:,1);
-Y_test = B(:,2);
-m_row_test = size(Y_test,1);
-L_test = TimeDelayBlock(m_row_test,na,nb,U_test,Y_test);
-k_test = forward(1200,wih,L_test);
-a_test = forwardOut(1200,woh,k_test);
-a_test = normalize(a_test);
-time_elapsed = toc
-a_t = normalize(a_t);
-t_t = [1:1:m_row_t]';
-subplot(211);
-plot(t_t,Y_t)
-hold on
-plot(t_t,a_t,'r')
-title('Training set')
-xlabel('time');
-ylabel('normalize concentration')
-legend('real data','estimated value')
-subplot(212);
-plot(t_t(1:m_row_test),a_test);
-hold on
-plot(t_t(1:m_row_test),Y_test,'r');
-title('Testing set')
-xlabel('time');
-ylabel('normalize concentration')
-legend('real data','estimated value')
 [num,denum,Gz] = NN2TF(regressorInp,regressorOut,na,nb)
